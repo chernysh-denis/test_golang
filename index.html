@@ -1,0 +1,49 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Data input</title>
+    <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+</head>
+
+<body>
+    <div>
+        <h2>Data input</h2>
+        <form id="sendNumbers">
+            <label>Set of numbers</label><br>
+            <textarea rows="10" cols="45" name="numbers"></textarea> <br><br>
+            <input type="submit" value="Отправить" />
+            <input type="button" value="Завершить" id="finishButton" />
+        </form>
+    </div>
+    <div>
+        <h2>Results</h2>
+        <p id="results"></p>
+    </div>
+
+</body>
+<script>
+    $(function () {
+        $("#sendNumbers").submit(function (e) {
+            e.preventDefault();
+            var $form = $(this),
+                data = $form.find('textarea[name="numbers"]').val(),
+                url = "/getNumbers";
+            var posting = $.post(url, { data: data });
+            posting.done(function (data) {
+                $("#results").append("<span>Result:</span> " + data + "<br>");
+            });
+        });
+        $("#finishButton").on('click', function(e){
+            e.preventDefault();
+            var $form = $(this),                
+                url = "/getResult";
+            var posting = $.post(url);
+            posting.done(function (data) {
+                $("#results").text(data);
+            });
+        });
+    });
+</script>
+
+</html>
