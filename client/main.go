@@ -55,7 +55,7 @@ func main() {
 		myscanner.Scan()
 		line := myscanner.Text()
 		if line == "exit" {
-			os.Exit(1)
+			exit()
 		} else {
 			r := input(line)
 			fmt.Printf("Server request:  %s\n", r)
