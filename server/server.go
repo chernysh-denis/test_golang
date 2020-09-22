@@ -1,4 +1,4 @@
-package main
+package server
 
 import (
 	"fmt"
@@ -7,12 +7,12 @@ import (
 	"strconv"
 	"strings"
 
-	"./computation"
+	"../computation"
 )
 
 var arrGlobal []int
 
-func main() {
+func Server() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "index.html")
 	})
