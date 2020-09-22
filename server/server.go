@@ -52,6 +52,7 @@ func Server() {
 	})
 	http.HandleFunc("/numbers", numbers)
 	http.HandleFunc("/result", result)
+	http.HandleFunc("/test", test)
 	log.Fatal(http.ListenAndServe("localhost:8000", nil))
 }
 
@@ -67,8 +68,9 @@ func numbers(w http.ResponseWriter, r *http.Request) {
 	chB, ch := checkInputData(myReq.Data)
 	if chB {
 		insertInGlobal(ch)
-		result, _ := computation.GetRepeatNumber(arrGlobal)
-		fmt.Printf("%v\nNew number: %s\n", arrGlobal, result)
+		res, _ := computation.GetRepeatNumber(arrGlobal)
+		result = res
+		fmt.Printf("%v\nRequired number: %s\n", arrGlobal, result)
 	}
 	message := map[string]string{
 		"data": fmt.Sprintf("%s", result),
@@ -84,5 +86,30 @@ func result(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println("Error get repeat number")
 	}
-	fmt.Fprintf(w, "Finished array: %v Result: %s", arrGlobal, result)
+	m := fmt.Sprintf("Finished array: %v \nRequired number: %s", arrGlobal, result)
+	message := map[string]string{
+		"data": m,
+	}
+	js, _ := json.Marshal(message)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(js)
+}
+
+func test(w http.ResponseWriter, r *http.Request) {
+	decoder := json.NewDecoder(r.Body)
+	var myReq MyRequest
+	err := decoder.Decode(&myReq)
+	if err != nil {
+		log.Println("Error decode")
+	}
+	log.Printf("Client send - %s", myReq.Data)
+
+	message := map[string]string{
+		"data": "Message from server",
+	}
+	js, _ := json.Marshal(message)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(js)
 }
