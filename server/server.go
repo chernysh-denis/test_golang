@@ -38,7 +38,7 @@ func checkInputData(input string) (bool, string) {
 func insertInGlobal(input string) {
 	arrT := strings.Split(input, ",")
 	for _, v := range arrT {
-		i, _ := strconv.Atoi(strings.TrimSpace(v))
+		i, _ := strconv.Atoi(v)
 		if i != 0 {
 			arrGlobal = append(arrGlobal, i)
 		}
